@@ -9,10 +9,13 @@ const {
     remove
 } = require('../Controllers/notes.controller');
 
-router.get('/', getAll);
-router.get('/:id', getById)
-router.post('/', add);
-router.put('/:id', update);
-router.delete('/:id', remove)
+router.route('/')
+    .get(getAll)
+    .post(add);
+
+router.route('/:id')
+    .get(getById)
+    .put(update)
+    .delete(remove);
 
 module.exports = router;
