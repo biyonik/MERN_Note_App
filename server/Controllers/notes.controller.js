@@ -1,6 +1,6 @@
-const {OK, NOT_FOUND, BAD_REQUEST} = require("http-status-codes");
+const {OK, NOT_FOUND, BAD_REQUEST, CREATED} = require("http-status-codes");
 const asyncHandler = require("express-async-handler");
-
+const noteModel = require('../Models/note.model');
 /**
  * Tüm notları getirir
  * @param requestObject
@@ -29,9 +29,20 @@ const getById = asyncHandler(async (requestObject, responseObject) => {
  * @param responseObject
  */
 const add = asyncHandler(async (requestObject, responseObject) => {
-    if (!requestObject.body.message) {
-        throw new Error('Lütfen mesaj bilgisi gönderiniz!');
+    const {title, description, priority} = requestObject.body;
+    if (!title || !description) {
+        responseObject.status(BAD_REQUEST);
+        throw new Error('Lütfen başlık ve açıklama alanlarını doldurunuz!');
     }
+    const note = await noteModel.create({
+        title: title,
+        description: description,
+        priority: priority
+    });
+
+    return await responseObject
+        .status(CREATED)
+        .json(note);
 });
 
 /**
