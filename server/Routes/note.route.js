@@ -1,35 +1,18 @@
 const {OK} = require("http-status-codes");
 const express = require('express');
 const router = express.Router();
+const {
+    getAll,
+    getById,
+    add,
+    update,
+    remove
+} = require('../Controllers/notes.controller');
 
-router.get('/', function (requestObject, responseObject) {
-    responseObject
-        .status(OK)
-        .json({message: 'GET ALL NOTES'});
-});
-
-router.get('/:id', (requestObject, responseObject) => {
-    responseObject
-        .status(OK)
-        .json({message: `GET BY ID NOTE FROM ${requestObject.params.id}`});
-})
-
-router.post('/', (requestObject, responseObject) => {
-    responseObject
-        .status(OK)
-        .json({message: 'POST NOTE'});
-});
-
-router.put('/:id', (requestObject, responseObject) => {
-    responseObject
-        .status(OK)
-        .json({message: `PUT NOTE FROM ${requestObject.params.id}`});
-});
-
-router.delete('/:id', (requestObject, responseObject) => {
-    responseObject
-        .status(OK)
-        .json({message: `DELETE NOTE FROM ${requestObject.params.id}`});
-})
+router.get('/', getAll);
+router.get('/:id', getById)
+router.post('/', add);
+router.put('/:id', update);
+router.delete('/:id', remove)
 
 module.exports = router;
