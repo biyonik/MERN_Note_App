@@ -7,9 +7,10 @@ const noteModel = require('../Models/note.model');
  * @param responseObject
  */
 const getAll = asyncHandler(async (requestObject, responseObject) => {
-    responseObject
-        .status(OK)
-        .json({message: 'GET ALL NOTES'});
+    const notes = await noteModel.find();
+    return await notes.count
+        ? responseObject.status(OK).json(notes)
+        : responseObject.status(NOT_FOUND).json();
 });
 
 /**
@@ -18,9 +19,15 @@ const getAll = asyncHandler(async (requestObject, responseObject) => {
  * @param responseObject
  */
 const getById = asyncHandler(async (requestObject, responseObject) => {
-    responseObject
-        .status(OK)
-        .json({message: `GET BY ID NOTE FROM ${requestObject.params.id}`});
+    const {id} = requestObject.params;
+    if (!id) {
+        responseObject.status(NOT_FOUND);
+        throw new Error('Geçerli bir id değeri göndermediniz!');
+    }
+    const note = await noteModel.find({_id: id});
+    return await note
+        ? responseObject.status(OK).json(note)
+        : responseObject.status(NOT_FOUND).json();
 });
 
 /**
@@ -51,7 +58,16 @@ const add = asyncHandler(async (requestObject, responseObject) => {
  * @param responseObject
  */
 const update = asyncHandler(async (requestObject, responseObject) => {
-
+    const {id} = requestObject.params;
+    const note = await noteModel.findById(id);
+    if (!note) {
+        responseObject.status(NOT_FOUND);
+        throw new Error('Böyle bir not bulunamadı!');
+    }
+    const updatedNote = await noteModel.findByIdAndUpdate(id, requestObject.body, {new: true});
+    return await updatedNote
+        ? responseObject.status(OK).json(updatedNote)
+        : responseObject.status(BAD_REQUEST).json();
 });
 
 /**
@@ -60,7 +76,15 @@ const update = asyncHandler(async (requestObject, responseObject) => {
  * @param responseObject
  */
 const remove = asyncHandler(async (requestObject, responseObject) => {
+    const {id} = requestObject.params;
+    const note = await noteModel.findById(id);
 
+    if (!note) {
+        responseObject.status(NOT_FOUND);
+        throw new Error('Böyle bir not bulunamadı!');
+    }
+    await note.remove();
+    return responseObject.status(OK).json();
 });
 
 module.exports = {
