@@ -1,3 +1,4 @@
 module.exports = {
-    NoteRoutes: require('./note.route')
+    NoteRoutes: require('./note.route'),
+    UserRoutes: require('./user.route')
 }

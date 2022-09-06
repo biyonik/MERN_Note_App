@@ -17,6 +17,11 @@ const NoteSchema = Schema({
     priority: {
         type: Number
     },
+    user: {
+        type: Schema.Types.ObjectId,
+        required: [true, '{PATH} alanı boş bırakılamaz'],
+        ref: 'User'
+    },
     createdAt: {
         type: Date,
         default: Date.now
