@@ -3,6 +3,7 @@ const { BAD_REQUEST, OK, CREATED, NOT_FOUND } = require("http-status-codes");
 const UserModel = require('../Models/user.model');
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require("jsonwebtoken");
+const { response } = require("express");
 
 const register = asyncHandler(async (requestObject, responseObject, nextFunction) => {
     const {username, email, password} = requestObject.body;
@@ -58,7 +59,7 @@ const login = asyncHandler(async (requestObject, responseObject, nextFunction) =
 });
 
 const get = asyncHandler(async (requestObject, responseObject, nextFunction) => {
-
+    return await responseObject.status(OK).json(requestObject.user);
 });
 
 module.exports = {

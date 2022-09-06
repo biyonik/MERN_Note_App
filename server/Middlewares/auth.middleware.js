@@ -8,7 +8,7 @@ module.exports = asyncHandler(async (requestObject, responseObject, nextFunction
     const token = requestObject.headers['x-axxess-token']
     || requestObject.body.token
     || requestObject.query.token
-    || requestObject.header('Authorization').replace('Bearer', '').trim();
+    || requestObject.header('Authorization')?.replace('Bearer', '').trim();
 
     if (token) {
         jsonwebtoken.verify(token, requestObject.app.get('API_SECRET_KEY'), async (err, decodedToken) => {

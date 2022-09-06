@@ -1,6 +1,8 @@
 const {OK} = require("http-status-codes");
 const express = require('express');
 const router = express.Router();
+const userControl = require('../Middlewares/auth.middleware');
+
 const {
     getAll,
     getById,
@@ -10,12 +12,12 @@ const {
 } = require('../Controllers/notes.controller');
 
 router.route('/')
-    .get(getAll)
-    .post(add);
+    .get(userControl, getAll)
+    .post(userControl, add);
 
 router.route('/:id')
-    .get(getById)
-    .put(update)
-    .delete(remove);
+    .get(userControl, getById)
+    .put(userControl ,update)
+    .delete(userControl ,remove);
 
 module.exports = router;
